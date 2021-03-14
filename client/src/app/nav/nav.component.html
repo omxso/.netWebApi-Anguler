@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark ">
+    <div class="container">
+      <a class="navbar-brand" href="#">App</a>
+        <ul class="navbar-nav me-auto mb-2 mb-md-0 " *ngIf="accountService.currentUser$ | async">
+          <li class="nav-item">
+            <a class="nav-link " aria-current="page" href="#">MATCHES</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">LISTS</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="#" >MESSAGES</a>
+          </li>
+        </ul>
+
+        <div class="dropdown" *ngIf="accountService.currentUser$| async" dropdown>
+          <a class="text-light dropdown-toggle" dropdownToggle>Welcome user</a>
+          <div class="dropdown-menu  mt-3"*dropdownMenu>
+            <a href="" class="dropdown-item">edit profile</a>
+            <div class="dropdown-divider"></div>
+            <a href="" class="dropdown-item" (click)="logout()">logout</a>
+          </div>
+        </div>
+        <form *ngIf="(accountService.currentUser$ | async) === null" #loginForm="ngForm" class="d-flex" (ngSubmit) = "login()" 
+        autocomplete="off">
+          <!--
+            "(accountService.currentUser$ | async) === null" = ASYNC PIPE
+            #loginForm="ngForm" = tamplate referenc variable, ngForm means its an Anguler form
+            (ngSubmit) = "login()" = by makeing anguler from we get method to submit form data
+             autocomplete="off"
+          -->
+          <input
+          name="username"
+          [(ngModel)]="model.username"  
+          class="form-control me-2"
+          type="text" placeholder="Username">
+          <!--
+            name="username" = giev input a name for tow ways binding
+            [(ngModel)]="model.username" = squer pracets used for receiving from the compmnent,
+            the parentheses when data gose the aouther way
+          -->
+          <input
+          name="password"
+          [(ngModel)]="model.password"
+          class="form-control me-2"
+          type="password" placeholder="Password">
+          <button class="btn btn-outline-success" type="submit">LOGIN</button>
+        </form>
+      </div>
+   
+  </nav>
