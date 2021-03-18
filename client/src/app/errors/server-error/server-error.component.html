@@ -1,0 +1,15 @@
+<h4>internal server error - refreshing the page will maje the error disappear!</h4>
+<ng-container *ngIf="error">
+    <h5 class="text-danger">Error: {{error.message}}</h5>
+    <p class="font-weight-blod">Note: anguler is not to blame</p>
+    <p>what netx?</p>
+    <ol>
+        <li>Open the chrome dev tools</li>
+        <li>inspect the network tab</li>
+        <li>check the failing request</li>
+        <li>examine the request URL - make sure this is correct</li>
+        <li>Reproduce the error in Postman - if we see the same reponse then the issue is not in anguler </li>
+    </ol>
+    <p>Folloing is the stack trace - this is where your investigation should start!</p>
+    <code class="mt-5" style="background-color: whitesmoke;">{{error.details}}</code>
+</ng-container>
