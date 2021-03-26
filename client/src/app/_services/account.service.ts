@@ -22,8 +22,9 @@ export class AccountService { // use to make request to the api
       {
         const user = response; // we wnat to get the user from the response
         if (user) { //this mean eather we have a user or we dont (null)
-          localStorage.setItem('user', JSON.stringify(user)); //populate the user object we get back in local storge in the browser
-          this.currentUserSource.next(user);//set observable to curent user we get back from API
+          // localStorage.setItem('user', JSON.stringify(user)); //populate the user object we get back in local storge in the browser
+          // this.currentUserSource.next(user);//set observable to curent user we get back from API
+          this.setCurrentUser(user);
         }
       })
     )
@@ -35,8 +36,7 @@ export class AccountService { // use to make request to the api
     return this.http.post(this.baseUrl + 'account/register', model).pipe(
       map((user: User) => {
         if(user) {
-          localStorage.setItem('user', JSON.stringify(user));
-          this.currentUserSource.next(user);
+          this.setCurrentUser(user);
 
         }
       }))
@@ -44,6 +44,7 @@ export class AccountService { // use to make request to the api
   }
 
   setCurrentUser(user: User) {//helper mathod , set to User
+    localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
   }
 
