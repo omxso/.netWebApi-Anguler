@@ -44,6 +44,9 @@ export class AccountService { // use to make request to the api
   }
 
   setCurrentUser(user: User) {//helper mathod , set to User
+    user.roles = [];
+    const roles = this.getDecodedToken(user.token).role;
+    Array.isArray(roles) ? user.roles = roles : user.roles.push(roles); 
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
   }
@@ -51,6 +54,10 @@ export class AccountService { // use to make request to the api
   logout(){ //logout method
     localStorage.removeItem('user');//remove the item from local storge based on key value
     this.currentUserSource.next(null);//set observable = to null
+  }
+
+  getDecodedToken(token) {
+    return JSON.parse(atob(token.split('.')[1])); // atob : this will allow to decoed the information inside what the token is returned 
   }
 }
 //1-services are injectable
