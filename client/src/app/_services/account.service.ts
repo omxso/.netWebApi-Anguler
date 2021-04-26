@@ -4,6 +4,7 @@ import { ReplaySubject } from 'rxjs';
 import {map} from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { User } from '../_models/user';
+import { PresenceService } from './presence.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class AccountService { // use to make request to the api
   baseUrl = environment.apiUrl; // : for taypes , = values
   private currentUserSource = new ReplaySubject<User>(1);//observable to store the user in, ReplaySubject= special observable, <User>=type of user, (1) how many value to store
   currentUser$ = this.currentUserSource.asObservable();// $ at the end mean its an Observable
-  constructor(private http: HttpClient)  { }
+  constructor(private http: HttpClient, private presence: PresenceService)  { }
   //inject the http clinet  into the account service
 
   login(model:any)
@@ -25,7 +26,8 @@ export class AccountService { // use to make request to the api
           // localStorage.setItem('user', JSON.stringify(user)); //populate the user object we get back in local storge in the browser
           // this.currentUserSource.next(user);//set observable to curent user we get back from API
           this.setCurrentUser(user);
-        }
+          this.presence.createHubContnection(user); //SignalR
+        }  
       })
     )
     //model = request body
@@ -37,6 +39,7 @@ export class AccountService { // use to make request to the api
       map((user: User) => {
         if(user) {
           this.setCurrentUser(user);
+          this.presence.createHubContnection(user); //SignalR
 
         }
       }))
@@ -54,6 +57,7 @@ export class AccountService { // use to make request to the api
   logout(){ //logout method
     localStorage.removeItem('user');//remove the item from local storge based on key value
     this.currentUserSource.next(null);//set observable = to null
+    this.presence.stopHubConnection(); //SignalR
   }
 
   getDecodedToken(token) {
